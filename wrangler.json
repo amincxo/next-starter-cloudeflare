@@ -11,5 +11,11 @@
   "observability": {
     "enabled": true
   },
-  "upload_source_maps": true
+  "upload_source_maps": true,
+  "routes": [
+    {
+      "pattern": "ai.aminborvayeh.ir/*",
+      "zone_name": "aminborvayeh.ir"
+    }
+  ]
 }
