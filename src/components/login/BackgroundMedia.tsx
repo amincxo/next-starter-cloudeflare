@@ -1,7 +1,7 @@
 "use client"; 
 
 import React, { useEffect, useRef, useState } from 'react'
-import type { BackgroundMediaProps , ResponsiveSources } from '../types/media.type'
+import type { BackgroundMediaProps , ResponsiveSources } from '../../types/media.type'
 
 
 

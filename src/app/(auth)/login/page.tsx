@@ -1,13 +1,14 @@
 // src/app/(auth)/login/page.tsx
 "use client";
 
-import BackgroundMedia from '@/components/BackgroundMedia'; 
+import BackgroundMedia from '@/components/login/BackgroundMedia'; 
 import { useForm, SubmitHandler } from "react-hook-form";
 import type { LoginFormInputs, LoginApiResponse, LoginApiError } from '@/types/login.type'; 
 import Head from 'next/head';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
+import PageVisitLogger, { ExtendedLogData } from '@/components/utils/PageVisitLogger';
 
 
 async function loginUser(credentials: LoginFormInputs): Promise<LoginApiResponse> {
@@ -50,6 +51,45 @@ async function loginUser(credentials: LoginFormInputs): Promise<LoginApiResponse
 
 
 export default function LoginPage() {
+
+
+         const [pageDetails, setPageDetails] = useState<{
+        host: string;
+        path: string;
+        extendedData: ExtendedLogData;
+      } | null>(null);
+    
+      useEffect(() => {
+        if (typeof window !== "undefined") {
+          setPageDetails({
+            host: window.location.hostname,
+            path: window.location.pathname,
+            extendedData: {
+              userAgent: navigator.userAgent,
+              screenWidth: window.screen.width,
+              screenHeight: window.screen.height,
+              viewportWidth: window.innerWidth, // عرض ویوپورت مرورگر
+              viewportHeight: window.innerHeight, // ارتفاع ویوپورت مرورگر
+              language: navigator.language,
+              languages: navigator.languages, // آرایه‌ای از زبان‌های ترجیحی کاربر
+              referrer: document.referrer, // از چه صفحه‌ای به این صفحه آمده
+              platform: navigator.platform, // سیستم عامل (ممکن است دقیق نباشد)
+              connection: (navigator as any).connection ? { // اطلاعات اتصال شبکه
+                effectiveType: (navigator as any).connection.effectiveType, // مثلا 4g, 3g
+                rtt: (navigator as any).connection.rtt, // Round Trip Time
+                downlink: (navigator as any).connection.downlink,
+              } : undefined,
+              // میتوانید موارد دلخواه دیگری هم اضافه کنید
+              // مثلا:
+              cookiesEnabled: navigator.cookieEnabled,
+              deviceMemory: (navigator as any).deviceMemory, // حافظه دستگاه (در گیگابایت)
+            }
+          });
+        }
+      }, []);
+
+
+
   const router = useRouter();
   const {
     register,
@@ -111,6 +151,15 @@ export default function LoginPage() {
 
   return (
     <>
+        {pageDetails && (
+        <PageVisitLogger
+          urlToLog={pageDetails.host}
+          pathToLog={pageDetails.path}
+          loggerApiUrl={`${process.env.NEXT_PUBLIC_BASE_URL}/logger`}
+          extendedData={pageDetails.extendedData}
+        />
+      )}
+
       <Head>
         <title>ورود به حساب کاربری</title>
       </Head>

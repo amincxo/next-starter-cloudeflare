@@ -8,6 +8,13 @@ const config: Config = {
   ],
   theme: {
     extend: {
+        colors: {
+        'brand-dark': '#1a202c', // یک رنگ پایه تیره
+        'brand-blue': '#3b82f6', // آبی اصلی
+        'brand-purple': '#8b5cf6', // بنفش اصلی
+        'brand-light': '#f1f5f9', // برای متون روشن روی پس زمینه تیره
+        'brand-accent': '#a78bfa', // یک بنفش روشن تر برای تاکید
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
@@ -16,6 +23,7 @@ const config: Config = {
       fontFamily: {
         vazir: ['Vazir', 'Arial', 'Helvetica', 'sans-serif']
       }
+      
     },
   },
   plugins: [],
